@@ -1,1 +1,96 @@
+local function findPlayer(plr)
+	if plr:lower() == "all" then
+		print('returned all')
+		local tab = {}
+		for i,v in pairs(game.Players:GetPlayers()) do
+			table.insert(tab, v)
+		end
+		return tab
+	else
+		for i,v in pairs(game.Players:GetPlayers()) do
+			if v.Name:sub(1,#plr):lower() == plr:lower() then
+				print(v.Name)
+				return {v}
+			end
+		end
+	end
+end
 
+local Anthex = {
+	["PluginName"] = "Anthex",
+	["PluginDescription"] = "Extra/Improved Commands made by anthlons.",
+	["Commands"] = {
+		["aesp"] = {
+			["ListName"] = "aesp opt:[plr/all]",
+			["Description"] = "AnthexEsp - Improved IY ESP!",
+			["Aliases"] = {},
+			["Function"] = function(args,speaker)
+				local plrs = findPlayer(args[1] or "all") 
+				for i, plr in pairs(plrs) do
+					if not plr.Character:FindFirstChild('Anthex_ESP') then
+						local Outline = Instance.new('Highlight')
+						Outline.Name = "Anthex_ESP"
+						Outline.Parent = plr.Character
+						Outline.Adornee = plr.Character
+						Outline.FillColor = Color3.fromRGB(255, 0, 213)
+						Outline.OutlineColor = Color3.fromRGB(255, 0, 213)
+						Outline.OutlineTransparency = 0
+						Outline.FillTransparency = .55
+						
+						-- name tag
+						local nameTag = Instance.new("BillboardGui")
+						nameTag.Parent = plr.Character.HumanoidRootPart
+						nameTag.Name = "Anthex_NameTag"
+						nameTag.AlwaysOnTop = true
+						nameTag.Size = UDim2.new(0, 100, 0, 100)
+						nameTag.Adornee = plr.Character.HumanoidRootPart
+						
+						local textLabel = Instance.new("TextLabel")
+						textLabel.Parent = nameTag
+						textLabel.Size = UDim2.new(1, 0, 1, 0)
+						textLabel.Name = "Anthex_ActualName"
+						textLabel.Text = plr.Name
+						textLabel.TextSize = 20
+						textLabel.BackgroundTransparency = 1
+						textLabel.Font = Enum.Font.GothamBold
+						textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+						textLabel.TextTransparency = .55
+						textLabel.TextStrokeTransparency = .7
+						textLabel.TextStrokeColor3 = Color3.fromRGB(255, 0, 213)
+					else
+						plr.Character:FindFirstChild('Anthex_ESP'):Destroy()
+						plr.Character.HumanoidRootPart['Anthex_NameTag']:Destroy()
+						local Outline = Instance.new('Highlight')
+						Outline.Name = "Anthex_ESP"
+						Outline.Parent = plr.Character
+						Outline.Adornee = plr.Character
+						Outline.FillColor = Color3.fromRGB(255, 0, 213)
+						Outline.OutlineColor = Color3.fromRGB(255, 0, 213)
+						Outline.OutlineTransparency = 0
+						Outline.FillTransparency = .55
+					end
+				end 
+			end
+		},
+		["unaesp"] = {
+			["ListName"] = "unaesp",
+			["Description"] = "Undo ;aesp! (Global)",
+			["Aliases"] = {},
+			["Function"] = function(args,speaker)
+				local plrs = findPlayer("all") 
+				for i, plr in pairs(plrs) do
+					if plr.Character:FindFirstChild('Anthex_ESP') then
+						plr.Character:FindFirstChild('Anthex_ESP'):Destroy()
+						plr.Character.HumanoidRootPart['Anthex_NameTag']:Destroy()
+					end
+				end
+			end
+		},
+	}
+}
+
+
+
+
+
+return Anthex
